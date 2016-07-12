@@ -14,5 +14,3 @@ CREATE TABLE public.prediction
 WITH (
   OIDS=FALSE
 );
-ALTER TABLE public.prediction
-  OWNER TO weathervane_app;
