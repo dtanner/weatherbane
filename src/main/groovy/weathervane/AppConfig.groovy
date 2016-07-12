@@ -8,22 +8,24 @@ class AppConfig {
     private static ConfigObject configObject
 
     private AppConfig() {
-        ConfigObject config = new ConfigSlurper().parse(new File("/etc/weathervane-config.groovy").toURI().toURL())
+        configObject = new ConfigObject()
 
-        if (System.getenv()['CONTINUOUS_INTEGRATION']) {
-            config.db.url = 'jdbc:postgresql://localhost:5432/weathervane'
-            config.db.username = 'postgres'
-            config.db.password = ''
-
-            CommandUtil.execute('psql -U postgres -d weathervane -a -f db/create-db.sql')
-        }
+        def env = System.getenv()
+        config.db.url = env.WEATHERVANE_DB_URL
+        config.db.username = env.WEATHERVANE_DB_USERNAME
+        config.db.password = env.WEATHERVANE_DB_PASSWORD
+        config.wunderground.apiKey = env.WEATHERVANE_WUNDERGROUND_API_KEY
 
         assert config.db.url
         assert config.db.username
-        assert config.db.password
-        // assert config.wunderground.apiKey
 
-        configObject = config
+        if (System.getenv()['CONTINUOUS_INTEGRATION']) {
+            CommandUtil.execute('psql -U postgres -d weathervane -a -f db/create-db.sql')
+        } else {
+            assert config.db.password
+            assert config.wunderground.apiKey
+        }
+
     }
 
     static ConfigObject getConfig() {

@@ -1,4 +1,4 @@
-DROP TABLE public.prediction;
+DROP TABLE IF EXISTS public.prediction;
 
 CREATE TABLE public.prediction
 (

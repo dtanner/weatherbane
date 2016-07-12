@@ -1,5 +1,5 @@
 language: groovy
-script: ./gradlew clean build
+script: ./gradlew --info clean build
 jdk: oraclejdk8
 env: TERM=dumb
 
@@ -9,11 +9,17 @@ addons:
 before_script:
   - psql -c 'create database weathervane;' -U postgres
 
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 cache:
   directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
     - $HOME/.m2
-    - $HOME/.gradle/caches/2.14
-    - $HOME/.gradle/caches/jars-1
-    - $HOME/.gradle/daemon
-    - $HOME/.gradle/native
-    - $HOME/.gradle/wrapper
+
+env:
+  global:
+    - WEATHERVANE_DB_URL=jdbc:postgresql://localhost:5432/weathervane
+    - WEATHERVANE_DB_USERNAME=postgres
+    - WEATHERVANE_DB_PASSWORD=
