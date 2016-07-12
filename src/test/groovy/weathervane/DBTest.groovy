@@ -8,7 +8,7 @@ class DBTest extends Specification {
 
     def "store predictions"() {
         given:
-        InputStream sampleFileIS = this.getClass().getResourceAsStream('/wunderground-3day-sample.json')
+        InputStream sampleFileIS = this.class.classLoader.getResourceAsStream('wunderground-3day-sample.json')
         def json = new JsonSlurper().parse(sampleFileIS)
 
         when:
