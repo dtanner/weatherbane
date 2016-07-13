@@ -5,16 +5,17 @@ But who keeps track of exactly what they said?  This project's goal is to do tha
 Initially, the focus is on collecting the most important data, like highs, lows, and WILL IT RAIN???!!!
 Then later it can provide tools to analyze the information.
 
+[![Build Status](https://travis-ci.org/dtanner/weathervane.svg?branch=master)](https://travis-ci.org/dtanner/weathervane)
 
 ## Development/Runtime Requirements
-`/etc/weathervane-config.groovy` for configuration.
-The AppConfig class asserts required config values. e.g.:
+It relies on these environment variables for configuration, with sample values:
 ```
-db {
-    url = 'jdbc:postgresql://localhost:5432/weathervane'
-    username = 'weathervane_app'
-    password = ''
-}
-wunderground.apiKey = ''
+WEATHERVANE_DB_URL                "jdbc:postgresql://localhost:5432/weathervane"
+WEATHERVANE_DB_USERNAME           "bob"
+WEATHERVANE_DB_PASSWORD           "super secret"
+WEATHERVANE_WUNDERGROUND_API_KEY  "abc123"
 ```
-postgresql, currently initialized with create-db.sql
+The AppConfig class asserts for the required config values.
+
+#### Database
+postgresql, initialized with `db/create-db.sql`
