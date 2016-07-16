@@ -1,13 +1,14 @@
 package weathervane
 
 import java.time.Instant
+import java.time.LocalDate
 
 class Prediction {
     Instant predictedOn
-    Instant targetDate
+    LocalDate targetDate
     String location
     String provider
     int high
     int low
-    int pop
+    BigDecimal pop
 }

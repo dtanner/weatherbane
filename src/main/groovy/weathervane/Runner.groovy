@@ -1,8 +1,9 @@
 package weathervane
 
 import groovy.util.logging.Slf4j
+import weathervane.collector.ForecastioCollector
 import weathervane.collector.PredictionCollector
-import weathervane.collector.wunderground.WundergroundCollector
+import weathervane.collector.WundergroundCollector
 
 import java.time.LocalDate
 
@@ -12,10 +13,16 @@ class Runner {
     public static void main(String[] args) {
         TimeZone.setDefault(TimeZone.getTimeZone('UTC'))
 
-        PredictionCollector collector = new WundergroundCollector()
-        List<Prediction> predictions = collector.collect(LocalDate.now().plusDays(1), Locations.MSP.airportCode)
+        List locations = [Locations.MSP]
+        List<PredictionCollector> collectors = [WundergroundCollector, ForecastioCollector] as List<PredictionCollector>
 
-        DB.instance.storePredictions(predictions)
+        collectors.each { Class<PredictionCollector> collectorType ->
+            PredictionCollector collector = collectorType.newInstance()
+            locations.each { Location location ->
+                List<Prediction> predictions = collector.collect(LocalDate.now(), location)
+                DB.instance.storePredictions(predictions)
+            }
+        }
     }
 
 }

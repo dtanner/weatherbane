@@ -1,10 +1,11 @@
-package weathervane.collector.wunderground
+package weathervane.collector
 
 import groovy.json.JsonSlurper
 import spock.lang.Specification
+import weathervane.Locations
 import weathervane.Prediction
 
-import java.time.Instant
+import java.time.LocalDate
 
 class WundergroundCollectorTest extends Specification {
 
@@ -14,13 +15,15 @@ class WundergroundCollectorTest extends Specification {
         def json = new JsonSlurper().parse(sampleFileIS)
 
         when:
-        List<Prediction> predictions = WundergroundCollector.parsePredictions('KMSP', json)
+        List<Prediction> predictions = WundergroundCollector.parsePredictions(Locations.MSP, json)
 
         then:
         predictions.size() == 4
-        predictions[0].targetDate == Instant.ofEpochSecond(1468195200)
+        predictions[0].targetDate == LocalDate.of(2016, 07, 10)
+        predictions[0].location == 'MSP'
+        predictions[0].provider == 'wunderground'
         predictions[0].high == 85
         predictions[0].low == 74
-        predictions[0].pop == 50
+        predictions[0].pop == 0.50
     }
 }

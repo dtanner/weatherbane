@@ -15,6 +15,7 @@ class AppConfig {
         config.db.username = env.WEATHERVANE_DB_USERNAME
         config.db.password = env.WEATHERVANE_DB_PASSWORD
         config.wunderground.apiKey = env.WEATHERVANE_WUNDERGROUND_API_KEY
+        config.forecastio.apiKey = env.WEATHERVANE_FORECASTIO_API_KEY
 
         assert config.db.url
         assert config.db.username
@@ -24,6 +25,7 @@ class AppConfig {
         } else {
             assert config.db.password
             assert config.wunderground.apiKey
+            assert config.forecastio.apiKey
         }
 
     }

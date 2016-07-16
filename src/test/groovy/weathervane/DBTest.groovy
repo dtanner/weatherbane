@@ -3,7 +3,7 @@ package weathervane
 import groovy.json.JsonSlurper
 import groovy.util.logging.Slf4j
 import spock.lang.Specification
-import weathervane.collector.wunderground.WundergroundCollector
+import weathervane.collector.WundergroundCollector
 
 @Slf4j
 class DBTest extends Specification {
@@ -14,7 +14,7 @@ class DBTest extends Specification {
         def json = new JsonSlurper().parse(sampleFileIS)
 
         when:
-        List<Prediction> predictions = WundergroundCollector.parsePredictions('KMSP', json)
+        List<Prediction> predictions = WundergroundCollector.parsePredictions(Locations.MSP, json)
         DB.instance.storePredictions(predictions)
 
         then:

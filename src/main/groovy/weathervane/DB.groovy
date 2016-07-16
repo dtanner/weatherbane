@@ -35,7 +35,7 @@ class DB {
 
             sql.execute(query, [id         : UUID.randomUUID(),
                                 predictedOn: new Timestamp(prediction.predictedOn.toEpochMilli()),
-                                targetDate : new Timestamp(prediction.targetDate.toEpochMilli()),
+                                targetDate : java.sql.Date.valueOf(prediction.targetDate),
                                 location   : prediction.location,
                                 provider   : prediction.provider,
                                 high       : prediction.high,
