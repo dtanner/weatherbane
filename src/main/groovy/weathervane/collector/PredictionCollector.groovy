@@ -9,4 +9,5 @@ interface PredictionCollector {
 
     List<Prediction> collect(LocalDate targetDate, Location location)
 
+    String getProviderName()
 }

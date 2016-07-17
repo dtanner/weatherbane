@@ -21,7 +21,6 @@ class ForecastioCollectorTest extends Specification {
         predictions.size() == 8
         predictions[0].targetDate == LocalDate.of(2016, 07, 12)
         predictions[0].location == 'MSP'
-        predictions[0].provider == 'forecast.io'
         predictions[0].high == 85
         predictions[0].low == 71
         predictions[0].pop == 0.54

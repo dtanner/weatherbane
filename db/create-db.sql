@@ -1,16 +1,32 @@
-DROP TABLE IF EXISTS public.prediction;
-
-CREATE TABLE public.prediction
+drop table if exists public.prediction_response;
+create table public.prediction_response
 (
-  id UUID PRIMARY KEY,
-  predicted_on TIMESTAMP WITH TIME ZONE NOT NULL,
-  target_date DATE NOT NULL,
-  location varchar(100) NOT NULL,
-  provider varchar(100) NOT NULL,
-  high INT NOT NULL,
-  low INT NOT NULL,
-  pop NUMERIC(2, 2) NOT NULL
+  id                uuid primary key,
+  created_timestamp timestamp with time zone not null,
+  provider          varchar(100)             not null,
+  response_code     int                      not null,
+  response_text     jsonb                    not null
 )
-WITH (
-  OIDS=FALSE
+with (
+oids = false
 );
+
+
+drop table if exists public.prediction;
+create table public.prediction
+(
+  id           uuid primary key,
+  predicted_on timestamp with time zone not null,
+  target_date  date                     not null,
+  location     varchar(100)             not null,
+  provider     varchar(100)             not null,
+  high         int                      not null,
+  low          int                      not null,
+  pop          numeric(3, 2)            not null,
+  response_id  uuid                     not null
+)
+with (
+oids = false
+);
+
+

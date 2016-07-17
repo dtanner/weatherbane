@@ -1,8 +1,9 @@
 package weathervane.collector
 
+import groovy.json.JsonSlurper
 import groovy.util.logging.Slf4j
-import groovyx.net.http.HTTPBuilder
 import weathervane.AppConfig
+import weathervane.DB
 import weathervane.Location
 import weathervane.Prediction
 
@@ -19,16 +20,25 @@ class ForecastioCollector implements PredictionCollector {
     List<Prediction> collect(LocalDate targetDate, Location location) {
         String apiKey = AppConfig.config.forecastio.apiKey
 
-        List<Prediction> predictions = null
+        String pathString = "https://api.forecast.io/forecast/${apiKey}/${location.latCommaLong()}"
 
-        HTTPBuilder http = new HTTPBuilder('https://api.forecast.io')
-        String pathString = "/forecast/${apiKey}/${location.latCommaLong()}"
-        http.get(path: pathString) { response, json ->
-//            log.debug response.entity.content.text
-            log.debug(json.toString())
-            predictions = parsePredictions(location, json)
-        }
+        HttpURLConnection connection = new URL(pathString).openConnection() as HttpURLConnection
+        int responseCode = connection.responseCode
+        String responseText = connection.inputStream.text
+
+        UUID responseId = DB.storeResponse(providerName, responseCode, responseText)
+
+        def json = new JsonSlurper().parseText(responseText)
+        List<Prediction> predictions = parsePredictions(location, json)
+        predictions*.responseId = responseId
+        predictions*.provider = providerName
+
         return predictions
+    }
+
+    @Override
+    String getProviderName() {
+        'forecast.io'
     }
 
     static List<Prediction> parsePredictions(Location location, response) {
@@ -43,7 +53,6 @@ class ForecastioCollector implements PredictionCollector {
             Prediction prediction = new Prediction(predictedOn: Instant.now(),
                     targetDate: targetDate,
                     location: location.name,
-                    provider: 'forecast.io',
                     high: forecast.temperatureMax.setScale(0, HALF_UP).toInteger(),
                     low: forecast.temperatureMin.setScale(0, HALF_UP).toInteger(),
                     pop: forecast.precipProbability)

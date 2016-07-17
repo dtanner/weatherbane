@@ -1,8 +1,9 @@
 package weathervane.collector
 
+import groovy.json.JsonSlurper
 import groovy.util.logging.Slf4j
-import groovyx.net.http.HTTPBuilder
 import weathervane.AppConfig
+import weathervane.DB
 import weathervane.Location
 import weathervane.Prediction
 
@@ -17,15 +18,25 @@ class WundergroundCollector implements PredictionCollector {
     List<Prediction> collect(LocalDate targetDate, Location location) {
         String apiKey = AppConfig.config.wunderground.apiKey
 
-        List<Prediction> predictions = null
+        String pathString = "http://api.wunderground.com/api/${apiKey}/forecast/q/${location.airportCode}.json"
 
-        HTTPBuilder http = new HTTPBuilder('http://api.wunderground.com')
-        String pathString = "/api/${apiKey}/forecast/q/${location.airportCode}.json"
-        http.get(path: pathString) { response, json ->
-            log.debug(json.toString())
-            predictions = parsePredictions(location, json)
-        }
+        HttpURLConnection connection = new URL(pathString).openConnection() as HttpURLConnection
+        int responseCode = connection.responseCode
+        String responseText = connection.inputStream.text
+
+        UUID responseId = DB.storeResponse(providerName, responseCode, responseText)
+
+        def json = new JsonSlurper().parseText(responseText)
+        List<Prediction> predictions = parsePredictions(location, json)
+        predictions*.responseId = responseId
+        predictions*.provider = providerName
+
         return predictions
+    }
+
+    @Override
+    String getProviderName() {
+        'wunderground'
     }
 
     static List<Prediction> parsePredictions(Location location, response) {
@@ -39,7 +50,6 @@ class WundergroundCollector implements PredictionCollector {
             Prediction prediction = new Prediction(predictedOn: Instant.now(),
                     targetDate: targetDate,
                     location: location.name,
-                    provider: 'wunderground',
                     high: forecast.high.fahrenheit.toInteger(),
                     low: forecast.low.fahrenheit.toInteger(),
                     pop: forecast.pop.toInteger() / 100)

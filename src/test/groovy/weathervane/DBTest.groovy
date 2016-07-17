@@ -15,9 +15,19 @@ class DBTest extends Specification {
 
         when:
         List<Prediction> predictions = WundergroundCollector.parsePredictions(Locations.MSP, json)
+        predictions*.responseId = UUID.randomUUID()
+        predictions*.provider = 'a'
         DB.instance.storePredictions(predictions)
 
         then:
         predictions.size() == 4
+    }
+
+    def "store response"() {
+        when:
+        UUID id = DB.instance.storeResponse('a', 200, '{}')
+
+        then:
+        id
     }
 }

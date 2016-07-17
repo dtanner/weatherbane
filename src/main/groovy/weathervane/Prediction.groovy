@@ -11,4 +11,5 @@ class Prediction {
     int high
     int low
     BigDecimal pop
+    UUID responseId
 }
