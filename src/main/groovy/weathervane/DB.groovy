@@ -54,7 +54,7 @@ class DB {
 
         String query = """
             insert into prediction_response(id, created_timestamp, provider, response_code, response_text)
-            values (:id, :createdTimestamp, :provider, :responseCode, cast(:responseText as json))
+            values (:id, :createdTimestamp, :provider, :responseCode, cast(:responseText as jsonb))
             """
 
         def insertedIds = sql.executeInsert(query, [id              : UUID.randomUUID(),
