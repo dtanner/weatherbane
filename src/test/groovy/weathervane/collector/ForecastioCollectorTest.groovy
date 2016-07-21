@@ -2,7 +2,7 @@ package weathervane.collector
 
 import groovy.json.JsonSlurper
 import spock.lang.Specification
-import weathervane.Locations
+import weathervane.Location
 import weathervane.Prediction
 
 import java.time.LocalDate
@@ -15,7 +15,7 @@ class ForecastioCollectorTest extends Specification {
         def json = new JsonSlurper().parse(sampleFileIS)
 
         when:
-        List<Prediction> predictions = new ForecastioCollector().parsePredictions(Locations.MSP, json)
+        List<Prediction> predictions = new ForecastioCollector().parsePredictions(Location.MSP, json)
 
         then:
         predictions.size() == 8

@@ -49,7 +49,7 @@ class NoaaCollector extends PredictionCollector {
 
             Prediction prediction = new Prediction(predictedOn: Instant.now(),
                     targetDate: targetDate,
-                    location: location.name,
+                    location: location.name(),
                     high: high,
                     low: low,
                     pop: highestPop)

@@ -32,7 +32,7 @@ class WundergroundCollector extends PredictionCollector {
 
             Prediction prediction = new Prediction(predictedOn: Instant.now(),
                     targetDate: targetDate,
-                    location: location.name,
+                    location: location.name(),
                     high: forecast.high.fahrenheit.toInteger(),
                     low: forecast.low.fahrenheit.toInteger(),
                     pop: forecast.pop.toInteger() / 100)

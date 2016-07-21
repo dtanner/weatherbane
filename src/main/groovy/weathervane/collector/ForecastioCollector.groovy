@@ -35,7 +35,7 @@ class ForecastioCollector extends PredictionCollector {
 
             Prediction prediction = new Prediction(predictedOn: Instant.now(),
                     targetDate: targetDate,
-                    location: location.name,
+                    location: location.name(),
                     high: forecast.temperatureMax.setScale(0, HALF_UP).toInteger(),
                     low: forecast.temperatureMin.setScale(0, HALF_UP).toInteger(),
                     pop: forecast.precipProbability)

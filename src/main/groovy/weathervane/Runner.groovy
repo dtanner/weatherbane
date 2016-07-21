@@ -12,13 +12,12 @@ class Runner {
     public static void main(String[] args) {
         TimeZone.setDefault(TimeZone.getTimeZone('UTC'))
 
-        List locations = [Locations.MSP]
 //        List<PredictionCollector> collectors = [WundergroundCollector] as List<PredictionCollector>
         List<PredictionCollector> collectors = [WundergroundCollector, ForecastioCollector, NoaaCollector] as List<PredictionCollector>
 
         collectors.each { Class<PredictionCollector> collectorType ->
             PredictionCollector collector = collectorType.newInstance()
-            locations.each { Location location ->
+            Location.values().each { Location location ->
                 List<Prediction> predictions = collector.collect(location)
                 log.debug "Storing ${predictions.size()} predictions for ${collector.providerName}"
                 DB.instance.storePredictions(predictions)
