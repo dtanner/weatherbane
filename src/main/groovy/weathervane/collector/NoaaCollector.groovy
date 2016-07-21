@@ -1,9 +1,5 @@
 package weathervane.collector
 
-import groovy.json.JsonSlurper
-import groovy.util.logging.Slf4j
-import weathervane.AppConfig
-import weathervane.DB
 import weathervane.Location
 import weathervane.Prediction
 
@@ -12,27 +8,11 @@ import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-@Slf4j
-class NoaaCollector implements PredictionCollector {
+class NoaaCollector extends PredictionCollector {
 
     @Override
-    List<Prediction> collect(LocalDate targetDate, Location location) {
-        String apiKey = AppConfig.config.noaa.apiKey
-
-        String pathString = "http://forecast.weather.gov/MapClick.php?lat=${location.latitude}&lon=${location.longitude}&FcstType=json"
-
-        HttpURLConnection connection = new URL(pathString).openConnection() as HttpURLConnection
-        int responseCode = connection.responseCode
-        String responseText = connection.inputStream.text
-
-        UUID responseId = DB.storeResponse(providerName, responseCode, responseText)
-
-        def json = new JsonSlurper().parseText(responseText)
-        List<Prediction> predictions = parsePredictions(location, json)
-        predictions*.responseId = responseId
-        predictions*.provider = providerName
-
-        return predictions
+    String getPathString(Location location) {
+        return "http://forecast.weather.gov/MapClick.php?lat=${location.latitude}&lon=${location.longitude}&FcstType=json"
     }
 
     @Override
@@ -40,7 +20,8 @@ class NoaaCollector implements PredictionCollector {
         'noaa'
     }
 
-    static List<Prediction> parsePredictions(Location location, response) {
+    @Override
+    List<Prediction> parsePredictions(Location location, Object response) {
 
         List<Map> rows = []
         14.times {

@@ -15,7 +15,7 @@ class ForecastioCollectorTest extends Specification {
         def json = new JsonSlurper().parse(sampleFileIS)
 
         when:
-        List<Prediction> predictions = ForecastioCollector.parsePredictions(Locations.MSP, json)
+        List<Prediction> predictions = new ForecastioCollector().parsePredictions(Locations.MSP, json)
 
         then:
         predictions.size() == 8

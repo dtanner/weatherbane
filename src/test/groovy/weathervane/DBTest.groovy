@@ -14,7 +14,7 @@ class DBTest extends Specification {
         def json = new JsonSlurper().parse(sampleFileIS)
 
         when:
-        List<Prediction> predictions = WundergroundCollector.parsePredictions(Locations.MSP, json)
+        List<Prediction> predictions = new WundergroundCollector().parsePredictions(Locations.MSP, json)
         predictions*.responseId = UUID.randomUUID()
         predictions*.provider = 'a'
         DB.instance.storePredictions(predictions)

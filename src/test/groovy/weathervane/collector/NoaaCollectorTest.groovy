@@ -15,7 +15,7 @@ class NoaaCollectorTest extends Specification {
         def json = new JsonSlurper().parse(sampleFileIS)
 
         when:
-        List<Prediction> predictions = NoaaCollector.parsePredictions(Locations.MSP, json)
+        List<Prediction> predictions = new NoaaCollector().parsePredictions(Locations.MSP, json)
 
         then:
         predictions.size() == 6

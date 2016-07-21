@@ -2,10 +2,9 @@ package weathervane
 
 import groovy.util.logging.Slf4j
 import weathervane.collector.ForecastioCollector
+import weathervane.collector.NoaaCollector
 import weathervane.collector.PredictionCollector
 import weathervane.collector.WundergroundCollector
-
-import java.time.LocalDate
 
 @Slf4j
 class Runner {
@@ -15,12 +14,12 @@ class Runner {
 
         List locations = [Locations.MSP]
 //        List<PredictionCollector> collectors = [WundergroundCollector] as List<PredictionCollector>
-        List<PredictionCollector> collectors = [WundergroundCollector, ForecastioCollector] as List<PredictionCollector>
+        List<PredictionCollector> collectors = [WundergroundCollector, ForecastioCollector, NoaaCollector] as List<PredictionCollector>
 
         collectors.each { Class<PredictionCollector> collectorType ->
             PredictionCollector collector = collectorType.newInstance()
             locations.each { Location location ->
-                List<Prediction> predictions = collector.collect(LocalDate.now(), location)
+                List<Prediction> predictions = collector.collect(location)
                 log.debug "Storing ${predictions.size()} predictions for ${collector.providerName}"
                 DB.instance.storePredictions(predictions)
             }

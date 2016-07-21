@@ -15,7 +15,7 @@ class WundergroundCollectorTest extends Specification {
         def json = new JsonSlurper().parse(sampleFileIS)
 
         when:
-        List<Prediction> predictions = WundergroundCollector.parsePredictions(Locations.MSP, json)
+        List<Prediction> predictions = new WundergroundCollector().parsePredictions(Locations.MSP, json)
 
         then:
         predictions.size() == 4

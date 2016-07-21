@@ -1,13 +1,30 @@
 package weathervane.collector
 
+import groovy.json.JsonSlurper
+import weathervane.DB
 import weathervane.Location
 import weathervane.Prediction
 
-import java.time.LocalDate
+abstract class PredictionCollector {
 
-interface PredictionCollector {
+    List<Prediction> collect(Location location) {
+        HttpURLConnection connection = new URL(getPathString(location)).openConnection() as HttpURLConnection
+        int responseCode = connection.responseCode
+        String responseText = connection.inputStream.text
 
-    List<Prediction> collect(LocalDate targetDate, Location location)
+        UUID responseId = DB.storeResponse(providerName, responseCode, responseText)
 
-    String getProviderName()
+        def json = new JsonSlurper().parseText(responseText)
+        List<Prediction> predictions = parsePredictions(location, json)
+        predictions*.responseId = responseId
+        predictions*.provider = providerName
+
+        return predictions
+    }
+
+    abstract String getPathString(Location location)
+
+    abstract List<Prediction> parsePredictions(Location location, Object response)
+
+    abstract String getProviderName()
 }
