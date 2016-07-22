@@ -15,6 +15,7 @@ WEATHERVANE_DB_USERNAME           "bob"
 WEATHERVANE_DB_PASSWORD           "super secret"
 WEATHERVANE_WUNDERGROUND_API_KEY  "abc123"
 WEATHERVANE_FORECASTIO_API_KEY    "abc123"
+WEATHERVANE_AERIS_API_KEY         "abc123"
 ```
 The AppConfig class asserts for the required config values.
 
