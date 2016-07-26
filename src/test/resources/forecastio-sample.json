@@ -1233,7 +1233,7 @@
         "precipIntensityMaxTime": 1468414800,
         "precipProbability": 0.1,
         "precipType": "rain",
-        "temperatureMin": 68.24,
+        "temperatureMin": 68,
         "temperatureMinTime": 1468407600,
         "temperatureMax": 88.24,
         "temperatureMaxTime": 1468440000,

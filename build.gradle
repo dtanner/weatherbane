@@ -16,6 +16,7 @@ buildscript {
 
 apply plugin: 'idea'
 apply plugin: 'groovy'
+apply plugin: 'application'
 apply plugin: 'com.github.ben-manes.versions'
 apply from: 'gradle/publishing.gradle'
 
@@ -47,6 +48,8 @@ test {
         showStandardStreams = true
     }
 }
+
+mainClassName = 'weathervane.Runner'
 
 task copyTestResources(type: Copy) {
     from "${projectDir}/src/test/resources"
