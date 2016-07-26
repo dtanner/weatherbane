@@ -24,7 +24,7 @@ class NoaaCollector extends PredictionCollector {
     List<Prediction> parsePredictions(Location location, Object response) {
 
         List<Map> rows = []
-        14.times {
+        response.time.startValidTime.size().times {
             ZonedDateTime targetDate = ZonedDateTime.parse(response.time.startValidTime[it], DateTimeFormatter.ISO_DATE_TIME)
             Map row = [targetDate: targetDate.toLocalDate(),
                        tempLabel : response.time.tempLabel[it],
