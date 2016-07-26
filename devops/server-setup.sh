@@ -71,3 +71,14 @@ scp code/projects/weathervane/build/distributions/weathervane-0.1.0-SNAPSHOT.tar
 
 #read console mail
 cat /var/spool/mail/weathervane
+
+# configure rsyslog
+# vi /etc/rsyslog.conf: add this line:
+local6.*                                                /var/log/weathervane.log
+# uncomment these lines:
+$ModLoad imudp
+$UDPServerRun 514
+
+sudo systemctl restart rsyslog.service
+# todo - log rotation
+

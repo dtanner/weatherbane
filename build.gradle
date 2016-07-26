@@ -34,6 +34,12 @@ dependencies {
     testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
 }
 
+sourceSets {
+    main {
+        resources.srcDir 'src/main/resources'
+    }
+}
+
 task sourcesJar(type: Jar) {
     group 'Build'
     description 'An archive of the source code'
