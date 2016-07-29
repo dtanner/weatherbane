@@ -22,7 +22,11 @@ gpasswd -a weathervane wheel
 sudo timedatectl set-local-rtc 0
 
 sudo systemctl start firewalld
-sudo firewall-cmd --permanent --add-service=ssh
+# change ssh port
+sudo vi /etc/ssh/sshd_config
+sudo firewall-cmd --add-port 2200/tcp --permanent
+sudo firewall-cmd --add-port 2200/tcp
+sudo service sshd restart
 sudo firewall-cmd --reload
 sudo systemctl enable firewalld
 
@@ -82,3 +86,30 @@ $UDPServerRun 514
 sudo systemctl restart rsyslog.service
 # todo - log rotation
 
+# loggly setup:
+cd
+curl -O https://www.loggly.com/install/configure-file-monitoring.sh
+sudo bash configure-file-monitoring.sh -a weathervane -t MY_TOKEN -u dan -f /var/log/weathervane.log -l applog
+
+
+#fail2ban
+sudo yum install -y epel-release
+sudo yum install -y fail2ban
+sudo systemctl enable fail2ban
+sudo vi /etc/fail2ban/jail.local
+#######
+[DEFAULT]
+# Ban hosts for one hour:
+bantime = 3600
+
+# Override /etc/fail2ban/jail.d/00-firewalld.conf:
+banaction = iptables-multiport
+
+[sshd]
+enabled = true
+#######
+sudo systemctl restart fail2ban
+
+
+# grab database backup
+ssh weathervane "pg_dump -U weathervane weathervane | gzip -c" > /Users/dan/Dropbox/backups/weathervane/weathervane-db-backup.sql.gz
