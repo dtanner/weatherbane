@@ -1,4 +1,3 @@
-drop table if exists public.prediction_response;
 create table public.prediction_response
 (
   id                uuid primary key,
@@ -12,7 +11,6 @@ oids = false
 );
 
 
-drop table if exists public.prediction;
 create table public.prediction
 (
   id           uuid primary key,
@@ -29,4 +27,19 @@ with (
 oids = false
 );
 
+-- CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+-- SELECT uuid_generate_v1();
+
+create table public.observation
+(
+  id       uuid primary key default uuid_generate_v1(),
+  date     date          not null,
+  location varchar(100)  not null,
+  high     int           not null,
+  low      int           not null,
+  precip   numeric(3, 2) not null
+)
+with (
+oids = false
+);
 

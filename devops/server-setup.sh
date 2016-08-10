@@ -110,6 +110,3 @@ enabled = true
 #######
 sudo systemctl restart fail2ban
 
-
-# grab database backup
-ssh weathervane "pg_dump -U weathervane weathervane | gzip -c" > /Users/dan/Dropbox/backups/weathervane/weathervane-db-backup.sql.gz
