@@ -111,3 +111,7 @@ enabled = true
 sudo systemctl restart fail2ban
 
 # sophisticated deployment technique
+gw clean assemble
+scp /Users/dan/Dropbox/code/projects/weathervane/build/distributions/weathervane-0.1.0-SNAPSHOT.tar weathervane@weathervane:~/weathervane.tar
+ssh weathervane
+tar xvf weathervane.tar
