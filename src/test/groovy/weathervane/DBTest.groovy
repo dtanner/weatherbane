@@ -1,11 +1,9 @@
 package weathervane
 
 import groovy.json.JsonSlurper
-import groovy.util.logging.Slf4j
 import spock.lang.Specification
 import weathervane.collector.WundergroundCollector
 
-@Slf4j
 class DBTest extends Specification {
 
     def "store predictions"() {

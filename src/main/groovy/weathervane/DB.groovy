@@ -28,8 +28,8 @@ class DB {
         Sql sql = new Sql(DB.instance.ds)
 
         String query = """
-            insert into prediction(id, predicted_on, target_date, location, provider, high, low, pop, response_id)
-            values (:id, :predictedOn, :targetDate, :location, :provider, :high, :low, :pop, :responseId)
+            insert into prediction(id, predicted_on, target_date, location, provider, high, low, pop, response_id, days_before)
+            values (:id, :predictedOn, :targetDate, :location, :provider, :high, :low, :pop, :responseId, :daysBefore)
             """
 
         predictions.each { Prediction prediction ->
@@ -38,6 +38,7 @@ class DB {
                                 predictedOn: new Timestamp(prediction.predictedOn.toEpochMilli()),
                                 responseId : prediction.responseId,
                                 targetDate : java.sql.Date.valueOf(prediction.targetDate),
+                                daysBefore : prediction.daysBefore,
                                 location   : prediction.location,
                                 provider   : prediction.provider,
                                 high       : prediction.high,

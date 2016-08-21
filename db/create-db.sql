@@ -43,3 +43,6 @@ with (
 oids = false
 );
 
+
+alter table prediction add column days_before smallint;
+update prediction set days_before = (select target_date::date - predicted_on::date);
