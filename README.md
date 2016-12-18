@@ -21,3 +21,7 @@ The AppConfig class asserts for the required config values.
 
 #### Database
 postgresql, initialized with `db/create-db.sql`
+
+### To get actual measurements
+https://www.ncdc.noaa.gov/cdo-web/search
+Get for SAN, DEN, MSP, CMX, ORD, SFO, JFK
