@@ -24,4 +24,4 @@ postgresql, initialized with `db/create-db.sql`
 
 ### To get actual measurements
 https://www.ncdc.noaa.gov/cdo-web/search
-Get for SAN, DEN, MSP, CMX, ORD, SFO, JFK
+Get daily summaries for SAN, DEN, MSP, CMX, ORD, SFO, JFK
