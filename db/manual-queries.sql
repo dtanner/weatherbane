@@ -1,16 +1,13 @@
-select target_date, location, provider, high, low, pop
-from prediction
-where target_date = '2016-07-27'
-      and date(predicted_on) = '2016-07-27'
-      and location = 'MSP'
-order by location, provider;
+-- set prediction absolute error values after getting observations
 
+-- get the actual observations for a given date/location
 select date, location, high, low, precip
 from observation
 where date = '2016-07-27'
       and location = 'MSP';
 
 
+-- get predictions for a given location/date/days_before
 select location, days_before, target_date, provider, high, low, pop
 from prediction
 where days_before <= 1
@@ -18,9 +15,3 @@ where days_before <= 1
       and target_date = '2016-08-05'
 order by provider, days_before;
 
-select date, location, high, low, precip
-from observation
-where location = 'MSP'
-      and date = '2016-08-05'
-order by date desc
-limit 100;
